@@ -1,17 +1,37 @@
+
 from workoutholly import app
 from flask import Flask, request, abort, render_template
 from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
+from linebot.models import MessageEvent, TextMessage, TextSendMessage
+
 import config
 
-linebot_client = LineBotApi(config.LINE_CHANNEL_SECRET)
-linebot_handler = WebhookHandler(config.LINE_CHANNEL_ACCESS_TOKEN)
+linebot_client = LineBotApi(config.LINE_CHANNEL_ACCESS_TOKEN)
+linebot_handler = WebhookHandler(config.LINE_CHANNEL_SECRET)
+
+
+
+# @app.route('/')
+# def index():
+        
+#     return  'Hello flask'
 
 
 @app.route('/')
 def index():
-    
-    return "<h1>Hello World</h1>"
+
+    return render_template('chest.html')
+
+@app.route('/chest', methods=[ 'POST'])
+def post_form():
+    fname = request.form.get('fname')
+    lname = request.form.get('lname')
+
+    print(fname, lname)
+
+    return 'ok'
+
 
 
 
@@ -34,10 +54,24 @@ def callback():
 
     return 'ok'
 
+@linebot_handler.add(MessageEvent, message=TextMessage)
+def handle_text_message(event):
+
+    # 當 LINE 後台發送測試訊號過來時，會使用一組假 token，無視它就好
+    if event.reply_token == '0' * 32:
+        return 
+
+    # 暫停 1.5 秒，假裝在打字或讀訊息
 
 
-@handler.add(MessageEvent, message=TextMessage)
+    # 隨機回覆一串敷衍訊息
+    linebot_client.reply_message(
+        event.reply_token,
+        TextSendMessage(
+            '放妳嗎狗屁！')
+        )
+    
 
 
-   
+
 
