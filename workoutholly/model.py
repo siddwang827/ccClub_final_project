@@ -58,7 +58,7 @@ class exercises(db.Model):
 class routines(db.Model):
     __tablename__ = 'routines'
     id = db.Column(db.Integer, primary_key=True)
-    weight = db.Column(db.Integer, nullable=False)
+    weight = db.Column(db.String(5), nullable=False)
     sets = db.Column(db.Integer, nullable=False)
     reps = db.Column(db.Integer, nullable=False)
     rest = db.Column(db.Integer, nullable=False)
@@ -81,7 +81,7 @@ class routines(db.Model):
 class temp_routines(db.Model):
     __tablename__ = 'temp_routines'
     id = db.Column(db.Integer, primary_key=True)
-    weight = db.Column(db.Integer, nullable=False)
+    weight = db.Column(db.String(5), nullable=False)
     sets = db.Column(db.Integer, nullable=False)
     reps = db.Column(db.Integer, nullable=False)
     rest = db.Column(db.Integer, nullable=False)
@@ -99,6 +99,46 @@ class temp_routines(db.Model):
         self.rest = rest
         self.exercise_id = exercise_id
         self.user_id = user_id
+
+# jinja2 web HTML參數定義
+class web_table():
+
+    tabel_head = [ 'No.', '訓練動作', '訓練重量', '訓練組數', '訓練次數', '組間休息時間' ]
+    weight_select = [ n * 2.5 if n < 12 else (n-6) * 5 for n in range(1, 27) ]
+    sets_select = [ n for n in range(1, 9) ]
+    reps_select =  [n for n in range(1, 26) ]
+    rest_select = [ 15, 30, 45, 60, 90, 120, 150, 180 ]
+
+    def __init__(self, position):
+        self.position = position
+    
+    def choose_exercises(self, position):
+        chest_exercises = [ '槓鈴臥推', '史密斯上胸', '啞鈴臥推', '斜板啞鈴上胸'  , '繩索夾胸', '機械下胸' ]
+        back_exercises = [ '引體向上', '槓鈴划船', '坐姿下拉', '坐姿划船', '直臂下拉', '啞鈴划船' ]
+        leg_exercises = [ '槓鈴深蹲', '保加利亞單腿蹲', '羅馬尼亞硬舉', '坐姿機械腿推', '股四頭前踢', '俯身勾腿' ]
+        shoulder_exercises = [ '槓鈴肩推', '啞鈴肩推', '啞鈴前平舉', '啞鈴惻平舉', '臉拉', '機械反向飛鳥' ]
+        arm_exercises = [ '法式彎舉', '繩索三頭下壓', '啞鈴單臂後屈伸', 'W槓二頭彎舉', '啞鈴垂式彎舉', '啞鈴斜板彎舉' ]
+
+        if position == 'chest':
+            exercises = chest_exercises[:]
+            
+        elif position == 'back':
+            exercises = back_exercises[:]
+           
+        elif position =='leg':
+            exercises = leg_exercises[:]
+            
+        elif position == 'shoulder':
+            exercises = shoulder_exercises[:]
+            
+        elif position == 'arm':
+            exercises = arm_exercises[:]
+
+        # exercises.insert(0,'請選擇動作')
+        self.exercises = exercises    
+
+        return self.exercises     
+
 
 
 if __name__ == "__main__":

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"></meta>
+    <title>課表規劃</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+</head>
+
+<body>
+    <div class="container">
+        <br>
+        {% if position == "chest" %}
+        <h1 style="font-weight:bold">胸部肌群 - 課表規劃</h1>
+        {% elif position == "back" %}
+        <h1 style="font-weight:bold">背部肌群 - 課表規劃</h1>
+        {% elif position == "leg" %}
+        <h1 style="font-weight:bold">腿部肌群 - 課表規劃</h1>
+        {% elif position == "shoulder" %}
+        <h1 style="font-weight:bold">肩部肌群 - 課表規劃</h1>
+        {% elif position == "arm" %}
+        <h1 style="font-weight:bold">手臂肌群 - 課表規劃</h1>
+        {% endif %}
+        <form  action="https://8a86c95c15c0.ngrok.io/routinesubmit" method="post">
+            <table class="table" >
+                <thead class="thead-dark">
+                    <tr>
+                        {% for ele in th %}
+                        <th scope="col" align="center">{{ele}}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in range(1,7) %}
+                    <tr>
+                        <th scope="row">{{row}}</th>
+                        <td>
+                            <select class="form-control" id="exercise_{{row}}" name="exercise_{{row}}">
+                                <option disabled selected data-image="icons/icon_calendar.gif">請選擇訓練動作</option>"
+                                {% for exercise in exercises %}
+                                <option value="{{exercise}}">{{exercise}}</option>
+                                {% endfor %}
+                            </select>
+                        </td>
+                        <td>
+                            <select class="form-control" id="weight_{{row}}" name="weight_{{row}}"  >
+                                <option disabled selected data-image="icons/icon_calendar.gif">請選擇重量(Kg)</option>"
+                                {% for w in weight %}
+                                <option value="{{w}}">{{w}}</option>
+                                {% endfor %}
+                            </select>
+                        </td>
+                        <td>
+                            <select class="form-control" id="sets_{{row}}" name="sets_{{row}}"  >
+                                <option disabled selected data-image="icons/icon_calendar.gif">請選擇組數</option>"
+                                {% for set in sets %}
+                                <option value="{{set}}">{{set}}</option>
+                                {% endfor %}
+                            </select>
+                        </td>
+                        <td>
+                            <select class="form-control" id="reps_{{row}}" name="reps_{{row}}"  >
+                                <option disabled selected data-image="icons/icon_calendar.gif">請選擇次數</option>"
+                                {% for rep in reps %}
+                                <option value="{{rep}}">{{rep}}</option>
+                                {% endfor %}
+                            </select>
+                        </td>
+                        <td>
+                            <select class="form-control" id="rest_{{row}}" name="rest_{{row}}"  >
+                                <option disabled selected data-image="icons/icon_calendar.gif">請選擇秒數</option>"
+                                {% for time in rest %}
+                                <option value="{{time}}">{{time}}</option>
+                                {% endfor %}
+                            </select>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <input class="btn btn-info" type="submit" value="設定課表" >
+        </form>
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+</body>
+</html>

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"></meta>
+    <title>課表規劃</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+</head>
+  
+<body>
+    <div class="container">
+        <h1 style="font-weight:bold">{{position}} - 課表規劃</h1>
+        <form  action="https://7c7d9f0bb0d1.ngrok.io/routinesubmit" method="post">
+            <table class="table" >
+                <thead class="thead-dark">
+                    <tr>
+                        {% for ele in th %}
+                        <th scope="col" align="center">{{ele}}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th scope="row">1</th>
+                        <td>
+                            <select class="form-control" id="exercise_1" name="exercise"  >
+                                <option value= "{{exercises[0]}}" select data-image="icons/icon_calendar.gif">{{exercises[0]}}</option>"
+                                {% for exercise in exercises[1:] %}
+                                <option value="{{exercise}}">{{exercise}}</option>
+                                {% endfor %}
+                            </select>
+                        </td>
+                        <td><input class="form-control" type="text" id="weight_1" name="weight" required placeholder="公斤"></td>
+                        <td><input class="form-control" type="text" id="sets_1" name="sets" required placeholder="次"></td>
+                        <td><input class="form-control" type="text" id="reps_1" name="reps" required placeholder="次" ></td>
+                        <td><input class="form-control" type="text" id="rest_1" name="rest" required placeholder="秒" ></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">2</th>
+                        <td>
+                            <select class="form-control" id="exercise_2" name="exercise">
+                                <option value= "{{exercises[0]}}" select>{{exercises[0]}}</option>"
+                                {% for exercise in exercises[1:] %}
+                                <option value="{{exercise}}">{{exercise}}</option>
+                                {% endfor %}
+                            </select>
+                        </td>
+                        <td><input class="form-control" type="text" id="weight_2" name="weight" required placeholder="公斤"></td>
+                        <td><input class="form-control" type="text" id="sets_2" name="sets" required placeholder="次"></td>
+                        <td><input class="form-control" type="text" id="reps_2" name="reps" required placeholder="次"></td>
+                        <td><input class="form-control" type="text" id="rest_2" name="rest" required placeholder="秒"></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">3</th>
+                        <td>
+                            <select class="form-control" id="exercise_3" name="exercise">
+                                <option value= "{{exercises[0]}}" select>{{exercises[0]}}</option>"
+                                {% for exercise in exercises[1:] %}
+                                <option value="{{exercise}}">{{exercise}}</option>
+                                {% endfor %}
+                            </select>
+                        </td>
+                        <td><input class="form-control" type="text" id="weight_3" name="weight" required placeholder="公斤"></td>
+                        <td><input class="form-control" type="text" id="sets_3" name="sets" required placeholder="次"></td>
+                        <td><input class="form-control" type="text" id="reps_3" name="reps" required placeholder="次"></td>
+                        <td><input class="form-control" type="text" id="rest_3" name="rest" required placeholder="秒"></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">4</th>
+                        <td>
+                            <select class="form-control" name="exercise_4" id="exercise">
+                                <option value= "{{exercises[0]}}" select>{{exercises[0]}}</option>"
+                                {% for exercise in exercises[1:] %}
+                                <option value="{{exercise}}">{{exercise}}</option>
+                                {% endfor %}
+                            </select>
+                        </td>
+                        <td><input class="form-control" type="text" id="weight_4" name="weight" required placeholder="公斤"></td>
+                        <td><input class="form-control" type="text" id="sets_4" name="sets" required placeholder="次"></td>
+                        <td><input class="form-control" type="text" id="reps_4" name="reps" required placeholder="次"></td>
+                        <td><input class="form-control" type="text" id="rest_4" name="rest" required placeholder="秒"></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">5</th>
+                        <td>
+                            <select class="form-control" id="exercise_5" name="exercise"">
+                                <option value= "{{exercises[0]}}" select>{{exercises[0]}}</option>"
+                                {% for exercise in exercises[1:] %}
+                                <option value="{{exercise}}">{{exercise}}</option>
+                                {% endfor %}
+                            </select>
+                        </td>
+                        <td><input class="form-control" type="text" id="weight_5" name="weight" required placeholder="公斤"></td>
+                        <td><input class="form-control" type="text" id="sets_5" name="sets" required placeholder="次"></td>
+                        <td><input class="form-control" type="text" id="reps_5" name="reps" required placeholder="次"></td>
+                        <td><input class="form-control" type="text" id="rest_5" name="rest" required placeholder="秒"></td>
+                    </tr>
+                    <tr>
+                        <th scope="row">6</th>
+                        <td>
+                            <select class="form-control" id="exercise_6" name="exercise">
+                                <option value= "{{exercises[0]}}" select>{{exercises[0]}}</option>"
+                                {% for exercise in exercises[1:] %}
+                                <option value="{{exercise}}">{{exercise}}</option>
+                                {% endfor %}
+                            </select>
+                        </td>
+                        <td><input class="form-control" type="text" id="weight_6" name="weight" required placeholder="公斤"></td>
+                        <td><input class="form-control" type="text" id="sets_6" name="sets" required placeholder="次"></td>
+                        <td><input class="form-control" type="text" id="reps_6" name="reps" required placeholder="次"></td>
+                        <td><input class="form-control" type="text" id="rest_6" name="rest" required placeholder="秒"></td>
+                    </tr>
+                </tbody>
+            </table>
+            <input class="btn btn-info" type="submit" value="設定課表" >
+        </form>
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+</body>
+</html>

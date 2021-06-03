@@ -1,38 +1,54 @@
-
+from linebot.models.events import PostbackEvent
 from workoutholly import app
-from flask import Flask, request, abort, render_template
+from workoutholly.model import web_table
+from flask import Flask, request, abort, render_template, jsonify
 from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
-from linebot.models import MessageEvent, TextMessage, TextSendMessage
+from linebot.models import MessageEvent, TextMessage, TextSendMessage, PostbackEvent, FlexSendMessage
+import json
 
 import config
 
 linebot_client = LineBotApi(config.LINE_CHANNEL_ACCESS_TOKEN)
-linebot_handler = WebhookHandler(config.LINE_CHANNEL_SECRET)
+handler = WebhookHandler(config.LINE_CHANNEL_SECRET)
 
 
 
-# @app.route('/')
-# def index():
-        
-#     return  'Hello flask'
 
 
-@app.route('/')
+@app.route('/',methods=['GET', 'POST'])
 def index():
+    text = {'arg1':'1', 'arg2': '2'}
 
-    return render_template('chest.html')
+    return render_template('timer.html', data=text)
 
-@app.route('/chest', methods=[ 'POST'])
+
+
+@app.route('/create_routine/<position>', methods=['POST', 'GET'])
+def create_routine(position):
+
+    table = web_table(position)
+    th = table.tabel_head
+    weight = table.weight_select
+    sets = table.sets_select 
+    reps = table.reps_select
+    rest = table.rest_select
+    exercises = table.choose_exercises(position)
+    return render_template('routine_set copy.html', th=th, exercises=exercises, position=position, weight=weight, sets=sets, reps=reps, rest=rest)
+
+
+@app.route('/routinesubmit', methods=[ 'POST'])
 def post_form():
-    fname = request.form.get('fname')
-    lname = request.form.get('lname')
+    data =  json.dumps(request.form)
+    data_j = json.loads(data)
+    
 
-    print(fname, lname)
+    print(type(data))
+    print(data)
+    print(type(data_j))
+    print(data_j)
 
-    return 'ok'
-
-
+    return data
 
 
 
@@ -47,31 +63,66 @@ def callback():
     body = request.get_data(as_text=True)
 
     try:
-        linebot_handler.handle(body, signature)   
+        handler.handle(body, signature)   
 
     except InvalidSignatureError: # 數位簽章錯誤
         abort(400)
 
     return 'ok'
 
-@linebot_handler.add(MessageEvent, message=TextMessage)
-def handle_text_message(event):
+# @handler.add(MessageEvent, message=TextMessage)
+# def handle_text_message(event):
 
-    # 當 LINE 後台發送測試訊號過來時，會使用一組假 token，無視它就好
-    if event.reply_token == '0' * 32:
-        return 
+#     # 當 LINE 後台發送測試訊號過來時，會使用一組假 token，無視它就好
+#     if event.reply_token == '0' * 32:
+#         return 
 
-    # 暫停 1.5 秒，假裝在打字或讀訊息
+#     # 暫停 1.5 秒，假裝在打字或讀訊息
 
 
-    # 隨機回覆一串敷衍訊息
-    linebot_client.reply_message(
-        event.reply_token,
-        TextSendMessage(
-            '放妳嗎狗屁！')
-        )
+#     # 隨機回覆一串敷衍訊息
+#     linebot_client.reply_message(
+#         event.reply_token,
+#         TextSendMessage(
+#             'https://8a86c95c15c0.ngrok.io/rich_menu_1')
+#         )
+
+
+@handler.add(MessageEvent, message=TextMessage)
+def handle_message(event):
+    mtext = event.message.text
     
+    if mtext == '課表規劃':
+        FlexMessage = json.load(open('C:\\Users\\sidd\\Desktop\\ccClub_final_project\\workoutholly\\static\\flexMessage.json','r',encoding='utf-8'))
+        linebot_client.reply_message(event.reply_token, FlexSendMessage('課表規劃',FlexMessage))
 
 
+
+# @app.route('/rich_menu_1', methods=['POST', 'GET'])
+# @handler.add(PostbackEvent)
+# def handle_post_event(event):
+#     postBack = event.postback.data
+#     print(type(postBack))
+#     position = postBack[2] # 從postback回的content中撈取部位關鍵字
+#     table = web_table(position)
+#     exercises = table.choose_exercises(position)
+#     th = table.tabel_head
+#     weight = table.weight_select
+#     sets = table.sets_select 
+#     reps = table.reps_select
+#     rest = table.rest_select
+
+#     if postBack[:2] == '規劃':
+
+
+
+#         # linebot_client.reply_message(event.reply_token, TextSendMessage('https://2acfebd2364b.ngrok.io//rich_menu_1'))
+
+#         return render_template('routine_set copy.html', th=th, exercises=exercises, position=position, 
+#                                 weight=weight, sets=sets, reps=reps, rest=rest)
+
+
+    
+    
 
 
