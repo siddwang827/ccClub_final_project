@@ -1,3 +1,41 @@
+
+Skip to content
+Pull requests
+Issues
+Marketplace
+Explore
+@siddwang827
+andykuo0956 /
+workoutpro_timer
+
+1
+0
+
+    0
+
+Code
+Issues
+Pull requests
+Actions
+Projects
+Wiki
+Security
+
+    Insights
+
+workoutpro_timer/ak1.html
+@andykuo0956
+andykuo0956 Add files via upload
+Latest commit d8e0062 2 minutes ago
+History
+1 contributor
+247 lines (188 sloc) 4.6 KB
+<!DOCTYPE html>
+<html>
+<head>
+	<title>workoutpro timer</title>
+
+<style type="text/css"> 
 @import url(http://webdev-workout.nilswe.com/css/normalize.min.css);
 
 /*===========================================================
@@ -92,26 +130,11 @@ a {
 	text-align: right;
 }
 
-#input_pause,
-#input_cycles {
-	max-width: 100%;
-	margin: 0 0 0 7em ;
-	padding: 0.35em 0.5em;
-	box-shadow: inset -5px 0 0 rgba(255,160,25,0);
-	border: none;
-}
-
-#input_pause:focus,
-#input_cycles:focus {
-	box-shadow: inset -5px 0 0 rgba(255,160,25,1);
-	transition: box-shadow 0.5s;
-} 
-
 .controller__button-start,
 .controller__button-stop {
 	display: block;
 	width: 80%;
-	margin: 2em auto 2.5em auto;
+	margin: em auto 2.5em auto;
 	padding: 1em 0;
 	background: rgb(30,180,50);
 	border-radius: 0.5em;
@@ -165,10 +188,17 @@ a {
 }
 
 .g-33 {
-	margin: 0 5em 0 5em;
-	float: left;
-	padding: 0 1em;
-	width: 33.33%;
+	margin: 1em 0 0 0;
+
+	font-family: 'Exo', sans-serif;
+	text-align: center;
+}
+
+.g-34{
+	margin: 1em 0 0 0;
+	font-family: 'Exo', sans-serif;
+	text-align: center;
+
 }
 
 li{list-style: none;}
@@ -176,3 +206,90 @@ li{list-style: none;}
 		display: block;
 		background-color: #4CAF50;
 }
+</style>
+</head>
+
+<body>
+<div class="clock">
+
+	<div class="row">
+
+		<div class="g-100">
+
+			<h1 class="clock__title">巨巨太強啦</h1>
+
+	
+
+			<div class="clock__counter"
+           id = "clock">00</div>
+
+			<div class="clock__round-counter"
+           id = "clock_round">0/{{data['sets']}}</div>
+
+		</div>
+
+	</div>	
+
+	<div class="row">
+
+		<div class="g-33">休息秒數<span id = rest>{{data['rest']}}</span></div>
+
+		<div class="g-34">組數<span id = sets>{{data['sets']}}</span></div>
+    
+		<div class="g-50"><button class="controller__button-start" id="button_start" onclick="display();">開始休息！</button></div>
+
+		<div class="g-50"><button class="controller__button-stop" id="button_stop" onclick="closeWindow();" >動作結束！</button></div>
+
+	</div>
+
+	<div class="row">
+
+	</div>	
+
+</div>
+<script type="text/javascript">
+	function display() {
+		var btn = document.getElementById("button_start");
+		var sec__rest = document.getElementsById("rest");
+		var number__sets = document.getElementsById("sets");
+		var clock__counter = document.getElementById("clock");
+		var clock__round = document.getElementById("clock_round");
+		clock__counter.innerHTML = sec__rest;//changed
+		clock__round.innerHTML = String(parseInt(clock__round.innerHTML) + 1) + '/'+number__sets;//changed
+    	btn.disabled="disabled";
+		var timer;
+		//clearInterval(timer);
+		timer = window.setInterval(function(){ 
+			clock__counter.innerHTML = String(parseInt(clock__counter.innerHTML) - 1); 
+			if (parseInt(clock__counter.innerHTML) <= 0) {
+				clock__counter.innerHTML = '0';
+				btn.disabled="";
+				clearInterval(timer);
+			}
+		}, 1000);
+	}
+
+	function closeWindow(){
+  		window.close();
+	}
+
+
+</script>
+</body>
+</html>
+
+    © 2021 GitHub, Inc.
+    Terms
+    Privacy
+    Security
+    Status
+    Docs
+
+    Contact GitHub
+    Pricing
+    API
+    Training
+    Blog
+    About
+
+Loading complete

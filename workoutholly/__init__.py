@@ -2,8 +2,6 @@
 from flask import Flask #載入 Flask
 from flask_sqlalchemy import SQLAlchemy
 
-
-
 import config
 
 
@@ -20,3 +18,4 @@ app.config['SQLALCHEMY_ECHO'] = True
 
 db = SQLAlchemy(app)
 
+from workoutholly import views

@@ -19,3 +19,5 @@ requests==2.25.1
 SQLAlchemy==1.4.15
 urllib3==1.26.4
 Werkzeug==2.0.1
+pandas==1.2.4
+wheel==0.36.2

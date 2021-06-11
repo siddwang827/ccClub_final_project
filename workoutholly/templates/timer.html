@@ -19,9 +19,11 @@
 
 	
 
-			<div class="clock__counter">000</div>
+			<div class="clock__counter"
+           id = "clock">00</div>
 
-			<div class="clock__round-counter">0/8</div>
+			<div class="clock__round-counter"
+           id = "clock_round">0/{{sets}}}}</div>
 
 		</div>
 
@@ -29,15 +31,14 @@
 
 	<div class="row">
 
-		<div class="g-33">Round (in sec.) <input id="input_round" type="text" value="0"></div>
+		<div class="g-33">休息秒數 <input id="input_pause" type="text" value={{data['rest']}}></div>
 
-		<div class="g-33">休息秒數 <input id="input_pause" type="text" value="10"></div>
+		<div class="g-33">組數 <input id="input_cycles" type="text" value={{data['sets']}}></div>
+    
+		<div class="g-50"><button class="controller__button-start" id="button_start" onclick="display();">開始休息！</button></div>
 
-		<div class="g-33">組數 <input id="input_cycles" type="text" value="8"></div>
-
-		<div class="g-50"><button class="controller__button-start" onclick="start();">開始休息！</button></div>
-
-		<div class="g-50"><button class="controller__button-stop" onclick="stop();">動作結束！</button></div>
+		<div class="g-50"><button class="controller__button-stop" id="button_stop" onclick="closeWindow();" >動作結束！</button></div>
+    
 
 	</div>
 
@@ -46,18 +47,6 @@
 	</div>	
 
 </div>
-<html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<title>Document</title>
-</head>
-<body>
-	<button class="btn">輸入資料</button>
-	<ul class="info">
-	</ul>
-	<script type="text/javascript">
-
-	</script>
 </body>
 </html>
 <!-- partial -->

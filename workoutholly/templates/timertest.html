@@ -1,3 +1,9 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>workoutpro timer</title>
+
+<style type="text/css"> 
 @import url(http://webdev-workout.nilswe.com/css/normalize.min.css);
 
 /*===========================================================
@@ -176,3 +182,87 @@ li{list-style: none;}
 		display: block;
 		background-color: #4CAF50;
 }
+</style>
+</head>
+
+<body>
+<div class="clock">
+
+	<div class="row">
+
+		<div class="g-100">
+
+			<h1 class="clock__title">巨巨太強啦</h1>
+
+	
+
+			<div class="clock__counter"
+           id = "clock">00</div>
+
+			<div class="clock__round-counter"
+           id = "clock_round">0/{{data['rest']}}</div>
+
+		</div>
+
+	</div>	
+
+	<div class="row">
+
+		<div class="g-33">休息秒數 <input id="input_pause" type="text" value={{data['rest']}}></div>
+
+		<div class="g-33">組數 <input id="input_cycles" type="text" value={{data['sets']}}></div>
+    
+		<div class="g-50"><button class="controller__button-start" id="button_start" onclick="display();">開始休息！</button></div>
+
+		<div class="g-50"><button class="controller__button-stop" id="button_stop" onclick="closeWindow();" >動作結束！</button></div>
+
+	</div>
+
+	<div class="row">
+
+	</div>	
+
+</div>
+<script type="text/javascript">
+	function display() {
+		var btn = document.getElementById("button_start");
+		var input_pause = document.getElementById("input_pause");
+		var clock__counter = document.getElementById("clock");
+		var clock__round = document.getElementById("clock_round");
+		clock__counter.innerHTML = String(parseInt(input_pause.value));//todo : data from backend
+		clock__round.innerHTML = String(parseInt(clock__round.innerHTML) + 1) + '/'+input_cycles.value;//todo : data from backend
+    	btn.disabled="disabled";
+		var timer;
+		//clearInterval(timer);
+		timer = window.setInterval(function(){ 
+			clock__counter.innerHTML = String(parseInt(clock__counter.innerHTML) - 1); 
+			if (parseInt(clock__counter.innerHTML) <= 0) {
+				clock__counter.innerHTML = '0';
+				btn.disabled="";
+				clearInterval(timer);
+			}
+		}, 1000);
+	}
+
+	function closeWindow(){
+  		window.close();
+	}
+/*錯誤的ajax
+	const endpoint = "";//等大大的URL
+	$.ajax({
+    	type: "GET",
+    	url: endpoint,
+    	dataType: "json",
+    	success: function (response) {
+			response["rest"];
+			response["sets"];
+    },
+    	error: function (thrownError) {
+      		console.log(thrownError);
+    }
+  });
+*/
+
+</script>
+</body>
+</html>

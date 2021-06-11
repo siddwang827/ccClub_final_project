@@ -1,0 +1,200 @@
+{
+  "type": "carousel",
+  "contents": [
+    {
+      "type": "bubble",
+      "size": "micro",
+      "hero": {
+        "type": "image",
+        "url": "https://i2.wp.com/mag.unicornskincare.com/wp-content/uploads/2017/05/%E5%BC%95%E8%A8%80%E5%9C%96-1-1.jpg?resize=450%2C300&ssl=1",
+        "size": "full",
+        "gravity": "top",
+        "aspectMode": "cover"
+      },
+      "body": {
+        "type": "box",
+        "layout": "horizontal",
+        "contents": [
+          {
+            "type": "text",
+            "text": "Chest",
+            "size": "xxl",
+            "align": "center",
+            "margin": "none",
+            "weight": "bold",
+            "style": "italic",
+            "color": "#FFFFFF"
+          }
+        ],
+        "action": {
+          "type": "uri",
+          "label": "action",
+          "uri": "https://liff.line.me/1656063313-2ZQLeoMW"
+        },
+        "borderWidth": "none",
+        "backgroundColor": "#808080"
+      },
+      "styles": {
+        "footer": {
+          "separator": false
+        }
+      }
+    },
+    {
+      "type": "bubble",
+      "size": "micro",
+      "hero": {
+        "type": "image",
+        "url": "https://img2.goodfon.com/wallpaper/nbig/1/aa/back-muscles-muscle-mass.jpg",
+        "size": "full",
+        "gravity": "top",
+        "aspectMode": "cover"
+      },
+      "body": {
+        "type": "box",
+        "layout": "horizontal",
+        "contents": [
+          {
+            "type": "text",
+            "text": "Back",
+            "size": "xxl",
+            "align": "center",
+            "margin": "none",
+            "weight": "bold",
+            "style": "italic",
+            "color": "#666666"
+          }
+        ],
+        "action": {
+          "type": "uri",
+          "label": "action",
+          "uri": "https://liff.line.me/1656063313-8meJVbq4"
+        },
+        "borderWidth": "none",
+        "backgroundColor": "#DDDDDD"
+      },
+      "styles": {
+        "footer": {
+          "separator": false
+        }
+      }
+    },
+    {
+      "type": "bubble",
+      "size": "micro",
+      "hero": {
+        "type": "image",
+        "url": "https://i.imgur.com/jLGvFtj.jpeg",
+        "size": "full",
+        "gravity": "top",
+        "aspectMode": "cover"
+      },
+      "body": {
+        "type": "box",
+        "layout": "horizontal",
+        "contents": [
+          {
+            "type": "text",
+            "text": "Leg",
+            "size": "xxl",
+            "align": "center",
+            "margin": "none",
+            "weight": "bold",
+            "style": "italic",
+            "color": "#FFFFFF"
+          }
+        ],
+        "action": {
+          "type": "uri",
+          "label": "action",
+          "uri": "https://liff.line.me/1656063313-P5kjnZw6"
+        },
+        "borderWidth": "none",
+        "backgroundColor": "#808080"
+      },
+      "styles": {
+        "footer": {
+          "separator": false
+        }
+      }
+    },
+    {
+      "type": "bubble",
+      "size": "micro",
+      "hero": {
+        "type": "image",
+        "url": "https://www.kingofthegym.com/wp-content/uploads/2012/12/shoulder-training.jpg",
+        "size": "full",
+        "gravity": "top",
+        "aspectMode": "cover"
+      },
+      "body": {
+        "type": "box",
+        "layout": "horizontal",
+        "contents": [
+          {
+            "type": "text",
+            "text": "Shoulder",
+            "size": "xxl",
+            "align": "center",
+            "margin": "none",
+            "weight": "bold",
+            "style": "italic",
+            "color": "#666666"
+          }
+        ],
+        "action": {
+          "type": "uri",
+          "label": "action",
+          "uri": "https://liff.line.me/1656063313-Ka0jpE9y"
+        },
+        "borderWidth": "none",
+        "backgroundColor": "#DDDDDD"
+      },
+      "styles": {
+        "footer": {
+          "separator": false
+        }
+      }
+    },
+    {
+      "type": "bubble",
+      "size": "micro",
+      "hero": {
+        "type": "image",
+        "url": "https://maxi.imgix.net/Images/Article/large/shutterstock_529602238.jpg?w=848&h=328&auto=format&fit=crop&ixlib=imgixjs-3.4.2",
+        "size": "full",
+        "gravity": "top",
+        "aspectMode": "cover"
+      },
+      "body": {
+        "type": "box",
+        "layout": "horizontal",
+        "contents": [
+          {
+            "type": "text",
+            "text": "Arm",
+            "size": "xxl",
+            "align": "center",
+            "margin": "none",
+            "weight": "bold",
+            "style": "italic",
+            "color": "#FFFFFF"
+          }
+        ],
+        "action": {
+          "type": "uri",
+          "label": "action",
+          "uri": "https://liff.line.me/1656063313-MZ57XK3V"
+        },
+        "borderWidth": "none",
+        "backgroundColor": "#808080"
+      },
+      "styles": {
+        "footer": {
+          "separator": false
+        }
+      }
+    }
+  ]
+}

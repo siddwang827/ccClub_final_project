@@ -27,9 +27,9 @@
           }
         ],
         "action": {
-          "type": "uri",
-          "label": "action",
-          "uri": "https://2acfebd2364b.ngrok.io/create_routine/chest"
+          "type": "postback",
+          "data": "開始健身chest",
+          "label": "開始健身"
         },
         "borderWidth": "none",
         "backgroundColor": "#808080"
@@ -66,9 +66,9 @@
           }
         ],
         "action": {
-          "type": "uri",
-          "label": "action",
-          "uri": "https://2acfebd2364b.ngrok.io/create_routine/back"
+          "type": "postback",
+          "data": "開始健身back",
+          "label": "開始健身"
         },
         "borderWidth": "none",
         "backgroundColor": "#DDDDDD"
@@ -105,9 +105,9 @@
           }
         ],
         "action": {
-          "type": "uri",
-          "label": "action",
-          "uri": "https://2acfebd2364b.ngrok.io/create_routine/leg"
+          "type": "postback",
+          "data": "開始健身leg",
+          "label": "開始健身"
         },
         "borderWidth": "none",
         "backgroundColor": "#808080"
@@ -144,9 +144,9 @@
           }
         ],
         "action": {
-          "type": "uri",
-          "label": "action",
-          "uri": "https://2acfebd2364b.ngrok.io/create_routine/shoulder"
+          "type": "postback",
+          "data": "開始健身shoulder",
+          "label": "開始健身"
         },
         "borderWidth": "none",
         "backgroundColor": "#DDDDDD"
@@ -183,9 +183,9 @@
           }
         ],
         "action": {
-          "type": "uri",
-          "label": "action",
-          "uri": "https://2acfebd2364b.ngrok.io/create_routine/arm"
+          "type": "postback",
+          "data": "開始健身arm",
+          "label": "開始健身"
         },
         "borderWidth": "none",
         "backgroundColor": "#808080"

@@ -2,7 +2,7 @@ import requests
 import json
 from linebot import LineBotApi, WebhookHandler
 
-headers = {"Authorization":"Bearer MNSSthpXrqXLuyyC7Kd44XealdPdmhitULX8CJcl4teyLKHU4lh4ohoA84VgfSbjN0tI7DPlR/JfUdwyKFoYCboWzE6WQiXYvn5nrx2QokTC+hBLcYaiOPP6c1Ddzwz0SNL9oijLuvyF4kfCTyeblwdB04t89/1O/w1cDnyilFU=","Content-Type":"application/json"}
+headers = {"Authorization":"Bearer <LINE_CHANNEL_ACCESS_TOKEN>"}
 
 # body = {
 #     "size": {"width": 2500, "height": 1686},
@@ -12,7 +12,7 @@ headers = {"Authorization":"Bearer MNSSthpXrqXLuyyC7Kd44XealdPdmhitULX8CJcl4teyL
 #     "areas":[
 #         {
 #           "bounds": {"x": 0, "y": 0, "width": 1250, "height": 843},
-#           "action": {"type": "uri", "uri": "https://8a86c95c15c0.ngrok.io/rich_menu_1"},
+#           "action": {"type": "uri", "uri": "https://tw.stock.yahoo.com/"},
 
 #           "bounds": {"x": 1250, "y": 0, "width": 1250, "height": 843},
 #           "action": {"type": "uri", "uri": "https://tw.news.yahoo.com/"},
@@ -35,30 +35,30 @@ headers = {"Authorization":"Bearer MNSSthpXrqXLuyyC7Kd44XealdPdmhitULX8CJcl4teyL
 
 
 # 刪除rich_menu_ID
-body = {"richMenuId":"richmenu-4057744b4d5a2d88e1a1ad2d8811a428"}
-req = requests.request('Delete', 'https://api.line.me/v2/bot/richmenu/richmenu-4057744b4d5a2d88e1a1ad2d8811a428', 
+body = {"richMenuId":"<rich_menu_id>"}
+req = requests.request('Delete', 'https://api.line.me/v2/bot/richmenu/<rich_menu_id>', 
                        headers=headers,data=json.dumps(body).encode('utf-8'))
 print(req.text)
 
 
 # #設定預設的rich_menu_ID
-# req = requests.request('Post', 'https://api.line.me/v2/bot/user/all/richmenu/richmenu-4057744b4d5a2d88e1a1ad2d8811a428', headers=headers)
+# req = requests.request('Post', 'https://api.line.me/v2/bot/user/all/richmenu/<rich_menu_id>', headers=headers)
 # print(req.text)
 
 # 查看所有rich_menu_ID
-# line_bot_api = LineBotApi('MNSSthpXrqXLuyyC7Kd44XealdPdmhitULX8CJcl4teyLKHU4lh4ohoA84VgfSbjN0tI7DPlR/JfUdwyKFoYCboWzE6WQiXYvn5nrx2QokTC+hBLcYaiOPP6c1Ddzwz0SNL9oijLuvyF4kfCTyeblwdB04t89/1O/w1cDnyilFU=')
+# line_bot_api = LineBotApi('<LINE_CHANNEL_ACCESS_TOKEN>')
 # rich_menu_list = line_bot_api.get_rich_menu_list()
 # for rich_menu in rich_menu_list:
 #     print(rich_menu.rich_menu_id)
 
 
 # # 新增圖片到rich meun id
-# with open("C:\\Users\\sidd\\Desktop\\ccClub_final_project\\workoutholly\\rich_menu\\menutest123.jpg", 'rb') as f:
-#     line_bot_api.set_rich_menu_image("richmenu-4057744b4d5a2d88e1a1ad2d8811a428", "image/jpeg", f)
+# with open("image_path", 'rb') as f:
+#     line_bot_api.set_rich_menu_image("<rich_menu_id>", "image/jpeg", f)
 
 # # 下載rich menu id 中的圖片
-# content = line_bot_api.get_rich_menu_image('richmenu-92071d63b7a861fb9853887caad4c737')
-# with open("C:\\Users\\sidd\\Desktop\\ccClub_final_project\\workoutholly\\rich_menu\\test4.jpg", 'wb') as fd:
+# content = line_bot_api.get_rich_menu_image('<rich_menu_id>')
+# with open("<image_path>", 'wb') as fd:
 #     for chunk in content.iter_content():
 #         fd.write(chunk)
 
