@@ -154,19 +154,14 @@ class Web_format():
 
         if self.position == 'chest':
             exercises = chest_exercises
-            
         elif self.position == 'back':
-            exercises = back_exercises
-           
+            exercises = back_exercises  
         elif self.position =='leg':
             exercises = leg_exercises
-            
         elif self.position == 'shoulder':
-            exercises = shoulder_exercises
-            
+            exercises = shoulder_exercises         
         elif self.position == 'arm':
             exercises = arm_exercises
-
         self.exercises = exercises    
 
         return self.exercises     
@@ -174,17 +169,13 @@ class Web_format():
     def position_translate(self):
         
         if self.position == 'chest':
-            self.position = '胸部'
-        
+            self.position = '胸部'        
         elif self.position == 'back':
-            self.position = '背部'
-            
+            self.position = '背部'           
         elif self.position == 'leg':
-            self.position = '腿部'
-            
+            self.position = '腿部'           
         elif self.position == 'shoulder':
-            self.position = '肩部'
-            
+            self.position = '肩部'           
         elif self.position == 'arm':
             self.position = '手臂'
 
@@ -234,7 +225,7 @@ class RoutineAction():
     def __init__(self) -> None:
         pass
 
-    def Add_routines_to_db(self, check_exercises, check_exercises_dict, user_db, position_db):
+    def add_routines_to_db(self, check_exercises, check_exercises_dict, user_db, position_db):
 
         for num in range(len(check_exercises)):
             exercisedata = Exercises.query.filter_by(name=check_exercises[num]).first()
@@ -249,7 +240,6 @@ class RoutineAction():
                 )
             db.session.add(routine)
             db.session.commit()
-
 
     def get_routine(self, position_name, lineuserid):
 
@@ -278,8 +268,7 @@ class RoutineAction():
 
         return routine_df
 
-
-    def Create_temp_routines(self, position_name, lineuserid):
+    def create_temp_routines(self, position_name, lineuserid):
 
         query = Routines.query.join(Positions, Users).filter((Positions.name == position_name) & (Users.lineuserid == lineuserid)).first()
 
@@ -313,25 +302,28 @@ class RoutineAction():
             db.session.commit()
             return 'OK'
 
-
     def get_routine_hint(self, position_name, lineuserid):
 
         user_db = Users.query.filter_by(lineuserid=lineuserid).first()
         position_db = Positions.query.filter_by(name=position_name).first()
 
-        # 從db獲取該user欲查詢部位的暫時課表的第一個動作名稱
+        # 從db獲取該user欲查詢部位暫時課表的第一個動作名稱
         temp_routines_query = Temp_routines.query.filter_by(position_id=position_db.id).filter_by(user_id= user_db.id).first()     
 
 
 
-        # 從db獲取user暫時課表轉換為dataframe
+        # 從db獲取user暫時課表轉成dataframe
         temp_routines_statement = Temp_routines.query.filter_by(position_id=position_db.id).filter_by(user_id= user_db.id).statement
         temp_routine_df = pd.read_sql(temp_routines_statement, db.engine)
 
         # 刪除多餘欄位
         del temp_routine_df['id'], temp_routine_df['user_id'], temp_routine_df['position_id'], temp_routine_df['create_time']
         
-        # 修改dataframe的column名稱, 調整index, 並把exercise_id置換為name
+        # 判斷是否為最後一組動作
+        if len(temp_routine_df.index) == 1:
+            last_exercise = True
+
+        # 修改dataframe的column名稱, 調整index, 把exercise_id置換為name
         tableColumn = Web_format.tabel_head[1:]
         exercise = {tableColumn[0]: temp_routines_query.exercises.name }
         temp_routine_df.columns = tableColumn
@@ -339,13 +331,11 @@ class RoutineAction():
         temp_routine_df = temp_routine_df[0:1]
         temp_routine_df['訓練動作'] = exercise[tableColumn[0]]
 
-        return temp_routine_df
+        return [temp_routine_df, last_exercise]
 
     def next_exercise_hint(self, lineuserid):
 
         user_db = Users.query.filter_by(lineuserid=lineuserid).first()
-
-
         
         try :
             # 從db獲取該user暫時課表的刪除上一個動作
@@ -355,16 +345,18 @@ class RoutineAction():
 
             temp_routines_query = Temp_routines.query.filter_by(user_id= user_db.id).first()
 
-            # 從db獲取user暫時課表轉換為dataframe
+            # 從db獲取user暫時課表轉成dataframe
             temp_routines_statement = Temp_routines.query.filter_by(user_id= user_db.id).statement
             temp_routine_df = pd.read_sql(temp_routines_statement, db.engine)
-
 
             # 刪除多餘欄位
             del temp_routine_df['id'], temp_routine_df['user_id'], temp_routine_df['position_id'], temp_routine_df['create_time']
 
+            # 判斷是否為最後一組動作
+            if len(temp_routine_df.index) == 1:
+                last_exercise = True
             
-            # 修改dataframe的column名稱, 調整index, 並把exercise_id置換為name
+            # 修改dataframe的column名稱, 調整index, 把exercise_id置換為name
             tableColumn = Web_format.tabel_head[1:]
             exercise = {tableColumn[0]: temp_routines_query.exercises.name }
             temp_routine_df.columns = tableColumn
@@ -375,7 +367,7 @@ class RoutineAction():
             position_name = temp_routines_query.positions.name
             
 
-            return [temp_routine_df, position_name]
+            return [temp_routine_df, position_name, last_exercise]
         
         except:
             
@@ -385,48 +377,20 @@ class RoutineAction():
 
 
 
-# if __name__ == "__main__":
-#     db.drop_all()
-#     db.create_all()
+if __name__ == "__main__":
+    db.drop_all()
+    db.create_all()
     
-#     foundation = Add_fondation_element()
-#     foundation.add_positions(positionSelect)
+    foundation = Add_fondation_element()
+    foundation.add_positions(positionSelect)
 
-#     for pos in positionSelect:
-#         foundation.add_exercises(pos, exercises_list)
+    for pos in positionSelect:
+        foundation.add_exercises(pos, exercises_list)
     
-#     sql = '''
-#         ALTER TABLE `orm_test`.`temp_routines` 
-#         CHANGE COLUMN `create_time` `create_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ;
-#     ''' 
-#     db.engine.execute(sql)
-    
-
-   
-# position_name = 'chest'
-# lineuserid = 'U10aeabde734bf2b26f04844b5f930329'
-
-# routines_query =Temp_routines.query.filter_by(position_id=position_db.id).filter_by(user_id= user_db.id).first()
-        
-# if not routines_query:
-#     print('沒東西')
-
-# # 從db獲取user欲查詢部位的課表並轉換為dataframe
-# routines_statement = Temp_routines.query.join(Positions, Users).filter((Positions.name == position_name) & (Users.lineuserid == lineuserid)).statement
-# routine_df = pd.read_sql(routines_statement, db.engine)
-
-# print(routine_df)
-
-# # 刪除多餘欄位
-# del routine_df['id'], routine_df['user_id'], routine_df['position_id'], routine_df['create_time']
-
-# # 修改dataframe的column名稱, 調整index, 並把exercise_id置換為name
-# tableColumn = Web_format.tabel_head[1:]
-# exercise = {tableColumn[0]: routines_query.exercises.name }
-# routine_df.columns = tableColumn
-# routine_df.index += 1
-# routine_df['訓練動作'] = exercise[tableColumn[0]]
-# routine_df = routine_df[0:1]
-# print(routine_df)
-
+    sql = '''
+        ALTER TABLE `orm_test`.`temp_routines` 
+        CHANGE COLUMN `create_time` `create_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ;
+    ''' 
+    db.engine.execute(sql)
+    db.session.commit()
 

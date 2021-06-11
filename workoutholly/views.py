@@ -60,6 +60,7 @@ def check_form():
     formData = request.form.to_dict()
     accessToken = formData.pop('access_token')
     position = formData.pop('position')
+
     # 檢查課表中是否有重複填寫的動作選項
     try:
         check_exercises = [ list(formData.values())[i] for i in range(len(formData)) if i % 5 == 0 ]
@@ -97,14 +98,13 @@ def submit_data_to_db(accessToken, position, check_exercises, check_exercises_di
     profile = json.loads(user_profile.text)
     lineuserid = profile['userId']
 
-    # 檢查此line userid 是否存在於database中
     user_db = Users.query.filter_by(lineuserid=lineuserid).first()
     position_db = Positions.query.filter_by(name=position).first()
+
     try:
         #將此user之前的課表先刪除，若user不存在userdata.id=none, 即報錯進入except 
         Routines.query.filter_by(user_id=user_db.id).filter_by(position_id=position_db.id).delete() 
         db.session.commit()
-        print('成功')
 
     # 上方報錯表示db內查詢不到lineuserid, 先新增user資料
     except: 
@@ -116,7 +116,7 @@ def submit_data_to_db(accessToken, position, check_exercises, check_exercises_di
     finally:
 
         action = RoutineAction()
-        action.Add_routines_to_db(check_exercises, check_exercises_dict, user_db, position_db)
+        action.add_routines_to_db(check_exercises, check_exercises_dict, user_db, position_db)
 
         
 # 課表查詢路由
@@ -137,7 +137,7 @@ def searh_routine():
     if routine_table.empty:
         return (f'∑(O_O;)\n巨巨尚未設定【{position_name}肌群】的課表!?\n事不宜遲趕快先進行課表規劃功能!')
 
-    output = f'{position_name}部肌群訓練課表\n'
+    output = f'這是巨巨目前【{position_name}肌群】的訓練課表~\n'
     routine_list = routine_table.to_dict(orient='records')
     
     for ele in routine_list:
@@ -155,8 +155,9 @@ def creat_temp_routine():
     formData = request.form.to_dict()
     position_name = formData['position']
     lineuserid = formData['user_id']
+
     action = RoutineAction()
-    temp_routine_table = action.Create_temp_routines(position_name, lineuserid)
+    temp_routine_table = action.create_temp_routines(position_name, lineuserid)
 
     trans = Web_format(position_name)
     position_cn = trans.position_translate()
@@ -172,15 +173,15 @@ def temp_routine_hint(position_name, lineuserid, position_cn):
 
     action = RoutineAction()
     routine_hint = action.get_routine_hint(position_name, lineuserid)
-    print(routine_hint)
 
-    routine = routine_hint.to_dict(orient='records')[0]
+    routine = routine_hint[0].to_dict(orient='records')[0]
     
+    last_exercise = routine_hint[1]
     sets = 0
     rest = 0
     exercise_name = str()
 
-    output = f'巨巨現在進行的是【{position_cn}部肌群】訓練\n\n'
+    output = f'巨巨現在進行的是【{position_cn}肌群】訓練\n\n'
 
     for key, value in routine.items():
         output += f'{key} : {value}\n'
@@ -191,7 +192,11 @@ def temp_routine_hint(position_name, lineuserid, position_cn):
         elif key == '組間休息時間(sec)':
             rest = value
 
-    output += f'\n點擊下方連結可以開啟輔助計時頁面~\n\nhttps://f99c6c53e900.ngrok.io/timer/exercise={exercise_name}&sets={sets}&rest={rest}'
+    output += f'\n點擊連結可以開啟輔助計時頁面\nhttps://f99c6c53e900.ngrok.io/timer/exercise={exercise_name}&sets={sets}&rest={rest}\n\n'
+
+    if last_exercise:
+    
+        output += f'竟然只安排了一個動作!\n太偷懶了吧廢物!!! ಠ▃ಠ'
 
     return output
 
@@ -204,14 +209,13 @@ def next_exercise_hint():
     next_exercise_hint = action.next_exercise_hint(lineuserid)
 
     if not next_exercise_hint:
-        return f'本次訓練動作已全部結束啦!\n運動後請記得補充蛋白質才會越來越巨唷~'
+        return f'(*￣▽￣)b\n本次訓練已經全部完成啦!!\n運動後請記得補充蛋白質才會越來越巨唷~'
 
     position_name = next_exercise_hint[1]
     trans = Web_format(position_name)
     position_cn = trans.position_translate()
 
-    
-
+    last_exercise = next_exercise_hint[2]
     routine = next_exercise_hint[0].to_dict(orient='records')[0]   
     sets = 0
     rest = 0
@@ -228,7 +232,11 @@ def next_exercise_hint():
         elif key == '組間休息時間(sec)':
             rest = value
 
-    output += f'\n點擊下方連結可以開啟輔助計時頁面~\n\nhttps://f99c6c53e900.ngrok.io/timer/exercise={exercise_name}&sets={sets}&rest={rest}'
+    output += f'\n點擊下方連結可以開啟輔助計時頁面\nhttps://f99c6c53e900.ngrok.io/timer/exercise={exercise_name}&sets={sets}&rest={rest}\n\n'
+    
+    if last_exercise:
+    
+        output += f'(*￣▽￣)b\n本次訓練已經全部完成啦!!\n運動後請記得補充蛋白質才會越來越巨唷~'
 
     return output
 
@@ -281,18 +289,7 @@ def handle_message(event):
         routine_hint = searchRoutine.text
         linebot_client.reply_message(event.reply_token, TextMessage(text=routine_hint))
 
-    # elif mtext == '下個動作':
 
-        
-
-        
-
-        # 回傳選項給user (flex Message 設定action為text)
-        # user點選查詢該部位課表 
-        # user帶入回傳查詢該部位課表
-        # MessageEvent 判定 "查詢X部課表"
-        # 回傳圖片
-        
 @handler.add(PostbackEvent) 
 def handle_postback(event):
 

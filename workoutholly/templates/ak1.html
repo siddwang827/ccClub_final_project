@@ -1,35 +1,4 @@
 
-Skip to content
-Pull requests
-Issues
-Marketplace
-Explore
-@siddwang827
-andykuo0956 /
-workoutpro_timer
-
-1
-0
-
-    0
-
-Code
-Issues
-Pull requests
-Actions
-Projects
-Wiki
-Security
-
-    Insights
-
-workoutpro_timer/ak1.html
-@andykuo0956
-andykuo0956 Add files via upload
-Latest commit d8e0062 2 minutes ago
-History
-1 contributor
-247 lines (188 sloc) 4.6 KB
 <!DOCTYPE html>
 <html>
 <head>
@@ -232,13 +201,13 @@ li{list-style: none;}
 
 	<div class="row">
 
-		<div class="g-33">休息秒數<span id = rest>{{data['rest']}}</span></div>
+		<div class="g-33">休息秒數<span id = rest value={{data['rest']}} >{{data['rest']}}</span></div>
 
-		<div class="g-34">組數<span id = sets>{{data['sets']}}</span></div>
+		<div class="g-34">組數<span id = sets value={{data['sets']}}>{{data['sets']}}</span></div>
     
-		<div class="g-50"><button class="controller__button-start" id="button_start" onclick="display();">開始休息！</button></div>
+		<div class="g-50"><button type="button" class="btn btn-outline-primary" id="button_start" onclick="display();">開始休息！</button></div>
 
-		<div class="g-50"><button class="controller__button-stop" id="button_stop" onclick="closeWindow();" >動作結束！</button></div>
+		<div class="g-50"><button type="button" class="btn btn-secondary id="button_stop" onclick="closeWindow();">動作結束！</button></div>
 
 	</div>
 
@@ -250,12 +219,11 @@ li{list-style: none;}
 <script type="text/javascript">
 	function display() {
 		var btn = document.getElementById("button_start");
-		var sec__rest = document.getElementsById("rest");
-		var number__sets = document.getElementsById("sets");
+		var input_pause = document.getElementById("input_pause");
 		var clock__counter = document.getElementById("clock");
 		var clock__round = document.getElementById("clock_round");
-		clock__counter.innerHTML = sec__rest;//changed
-		clock__round.innerHTML = String(parseInt(clock__round.innerHTML) + 1) + '/'+number__sets;//changed
+		clock__counter.innerHTML = String(parseInt(input_pause.value));//todo : data from backend
+		clock__round.innerHTML = String(parseInt(clock__round.innerHTML) + 1) + '/'+input_cycles.value;//todo : data from backend
     	btn.disabled="disabled";
 		var timer;
 		//clearInterval(timer);
@@ -271,25 +239,11 @@ li{list-style: none;}
 
 	function closeWindow(){
   		window.close();
-	}
 
 
 </script>
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 </body>
 </html>
-
-    © 2021 GitHub, Inc.
-    Terms
-    Privacy
-    Security
-    Status
-    Docs
-
-    Contact GitHub
-    Pricing
-    API
-    Training
-    Blog
-    About
-
-Loading complete
