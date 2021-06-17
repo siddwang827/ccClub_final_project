@@ -9,7 +9,12 @@
         "url": "https://i2.wp.com/mag.unicornskincare.com/wp-content/uploads/2017/05/%E5%BC%95%E8%A8%80%E5%9C%96-1-1.jpg?resize=450%2C300&ssl=1",
         "size": "full",
         "gravity": "top",
-        "aspectMode": "cover"
+        "aspectMode": "cover",
+        "action": {
+          "type": "postback",
+          "label": "開始健身",
+          "data": "開始健身chest"
+        }
       },
       "body": {
         "type": "box",
@@ -48,7 +53,12 @@
         "url": "https://img2.goodfon.com/wallpaper/nbig/1/aa/back-muscles-muscle-mass.jpg",
         "size": "full",
         "gravity": "top",
-        "aspectMode": "cover"
+        "aspectMode": "cover",
+        "action": {
+          "type": "postback",
+          "label": "開始健身",
+          "data": "開始健身back"
+        }
       },
       "body": {
         "type": "box",
@@ -87,7 +97,12 @@
         "url": "https://i.imgur.com/jLGvFtj.jpeg",
         "size": "full",
         "gravity": "top",
-        "aspectMode": "cover"
+        "aspectMode": "cover",
+        "action": {
+          "type": "postback",
+          "label": "開始健身",
+          "data": "開始健身leg"
+        }
       },
       "body": {
         "type": "box",
@@ -126,7 +141,12 @@
         "url": "https://www.kingofthegym.com/wp-content/uploads/2012/12/shoulder-training.jpg",
         "size": "full",
         "gravity": "top",
-        "aspectMode": "cover"
+        "aspectMode": "cover",
+        "action": {
+          "type": "postback",
+          "label": "開始健身",
+          "data": "開始健身shoulder"
+        }
       },
       "body": {
         "type": "box",
@@ -165,7 +185,12 @@
         "url": "https://maxi.imgix.net/Images/Article/large/shutterstock_529602238.jpg?w=848&h=328&auto=format&fit=crop&ixlib=imgixjs-3.4.2",
         "size": "full",
         "gravity": "top",
-        "aspectMode": "cover"
+        "aspectMode": "cover",
+        "action": {
+          "type": "postback",
+          "label": "開始健身",
+          "data": "開始健身arm"
+        }
       },
       "body": {
         "type": "box",

@@ -32,11 +32,11 @@ liff.init({
       liff.getProfile()
       .then(profile => {
       const username = profile.displayName;
-      const userid = profile.userId
-      alert('\nHi~\n\n巨巨 '+ username +'\n\n歡迎回來~');
+      // const userid = profile.userId
+      alert('\nHi '+ username +'~\n\n歡迎回來~');
       const accessToken = liff.getAccessToken();
-      document.getElementById("access_token").value = accessToken;
-      sendForm(accessToken);
+      document.getElementById("access_token").value = accessToken
+      document.getElementById("line_name").value = username;
       }
     )}
   }).catch((err) => {
@@ -45,16 +45,16 @@ liff.init({
 
 
 
-function sendForm() {
-  var sform = document.forms['form1']
-  sform.append('access_token', accessToken)
+// // function sendForm() {
+// //   var sform = document.forms['form1']
+// //   sform.append('access_token', accessToken)
 
-  $.ajax({
-    url:"https://f99c6c53e900.ngrok.io/routine_submit",
-    type:"POST",
-    data:JSON.stringify,
-    contentType: "application/json",
-    dataType:'json',
-  // success:function(){
-})
-}
+// //   $.ajax({
+// //     url:"https://f99c6c53e900.ngrok.io/routine_submit",
+// //     type:"POST",
+// //     data:JSON.stringify,
+// //     contentType: "application/json",
+// //     dataType:'json',
+//   // success:function(){
+// })
+// }

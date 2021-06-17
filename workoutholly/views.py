@@ -7,7 +7,7 @@ from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import MessageEvent, TextMessage, FlexSendMessage, PostbackEvent
 import json
-import ast
+
 
 sys.path.append('.')
 
@@ -26,17 +26,6 @@ def get(exercise, sets, rest):
     data = {'exercise': exercise , 'sets': sets, 'rest': rest}
 
     return render_template('ak1.html', data=data)
-
-    # session['data'] = data
-    # return redirect(url_for('timer'), data=data)
-
-# @app.route('/timer', methods=['POST'])
-# def timer():
-
-#     data = request.args['data']
-#     data = data['messages']
-    
-#     return render_template('ak1.html', data=data.to_dict())
 
 
 # 課表規劃網頁路由
@@ -59,6 +48,7 @@ def check_form():
 
     formData = request.form.to_dict()
     accessToken = formData.pop('access_token')
+    user_name = formData.pop('line_name')
     position = formData.pop('position')
 
     # 檢查課表中是否有重複填寫的動作選項
@@ -68,11 +58,11 @@ def check_form():
 
         if len(check_exercises) != len(set(check_exercises)):
 
-            return "<h1>課表內有重複的動作唷，請巨巨重新確認！</h1>"
+            return f"<h1>嗯...   (￣ ￣|||)</h1><h1>課表內有重複的動作！？請{user_name}回上一頁重新確認！</h1>"
 
         elif len(check_exercises) == 0:
 
-            return "<h1>請巨巨在課表內至少安排一個動作！該不會是想偷懶吧？ ಠ_ಠ</h1>"
+            return f"<h1>嗯... </h1><h1>請在課表內至少安排一個動作！{user_name}該不會是想偷懶吧？ ಠ_ಠ</h1><h1>請回上一頁重新確認</h1>"
 
         for num in range(1, (len(check_exercises) + 1)):
             check_exercises_dict[formData[f'exercise_{num}']] = [
@@ -81,14 +71,14 @@ def check_form():
                 formData[f'reps_{num}'], 
                 formData[f'rest_{num}']
             ]
-        # print(check_exercises)
-        # print(check_exercises_dict)
+
         submit_data_to_db(accessToken, position, check_exercises, check_exercises_dict)
-        return "<h1>成功上傳課表，巨巨隨時可以開始訓練啦！ ୧(๑•̀ㅁ•́๑)૭✧</h1>"
+        return f'<h1>成功上傳課表，{user_name} 隨時可以開始訓練啦！ ୧(๑•̀ㅁ•́๑)૭✧</h1>'
+                    
 
     except KeyError:
 
-        return "<h1>有些動作規劃得不完整，請巨巨重新確認！ (￣ ￣|||)</h1>"
+        return f"<h1>嗯....    (￣ ￣|||)</h1><h1>有些動作規劃得不完整，請{user_name}回上一頁重新確認！ </h1>"
 
   
 def submit_data_to_db(accessToken, position, check_exercises, check_exercises_dict):
@@ -133,19 +123,27 @@ def searh_routine():
     trans = Web_format(position_name)
     position_name = trans.position_translate()
     
-
     if routine_table.empty:
-        return (f'∑(O_O;)\n巨巨尚未設定【{position_name}肌群】的課表!?\n事不宜遲趕快先進行課表規劃功能!')
+        return (f"哎呀!   ∑(O_O;)\n尚未設定【{position_name}肌群】的課表!?\n事不宜遲快進行課表規劃功能!")
 
-    output = f'這是巨巨目前【{position_name}肌群】的訓練課表~\n'
+    head = f"您目前【{position_name}肌群】訓練課表"
     routine_list = routine_table.to_dict(orient='records')
-    
-    for ele in routine_list:
-        output += f'\n'
-        for i in range(len(ele)):
-            output += f'{list(ele.keys())[i]} : {list(ele.values())[i]}\n'
+    output = ""
+    for num in range(len(routine_list)):
+        for i in range(len(routine_list[num])):
+            output += f"{list(routine_list[num].keys())[i]} : {list(routine_list[num].values())[i]}"
+        if num != len(routine_list)-1:
+            output += "\n"
 
-    return output
+    if len(routine_list) == 1:
+
+        end = "窩靠!?   ಠ▃ಠ\n就只排一個動作!?你就這?"
+
+        return json.dumps({"head": head, "output": output, "end":end})
+
+    return json.dumps({"head": head, "output": output})
+
+
 
 
 # 開始健身路由
@@ -163,7 +161,7 @@ def creat_temp_routine():
     position_cn = trans.position_translate()
 
     if not temp_routine_table:
-        return (f'∑(O_O;)\n巨巨尚未設定【{position_cn}肌群】的課表!?\n事不宜遲趕快先進行課表規劃功能!')
+        return (f'哎呀!   ∑(O_O;)\n尚未設定【{position_cn}肌群】課表!?\n事不宜遲快進行課表規劃功能!')
     
     response = temp_routine_hint(position_name, lineuserid, position_cn)
 
@@ -179,12 +177,14 @@ def temp_routine_hint(position_name, lineuserid, position_cn):
     last_exercise = routine_hint[1]
     sets = 0
     rest = 0
-    exercise_name = str()
+    exercise_name = ""
 
-    output = f'巨巨現在進行的是【{position_cn}肌群】訓練\n\n'
+    head = f"開始進行【{position_cn}肌群】訓練"
+    output= ""
+    end = ""
 
     for key, value in routine.items():
-        output += f'{key} : {value}\n'
+        output += f"{key} : {value}\n"
         if key == '訓練動作':
             exercise_name = value      
         elif key == '訓練組數':
@@ -192,13 +192,14 @@ def temp_routine_hint(position_name, lineuserid, position_cn):
         elif key == '組間休息時間(sec)':
             rest = value
 
-    output += f'\n點擊連結可以開啟輔助計時頁面\nhttps://f99c6c53e900.ngrok.io/timer/exercise={exercise_name}&sets={sets}&rest={rest}\n\n'
+    output += f"\n點擊連結可以開啟輔助計時頁面\nhttps://f99c6c53e900.ngrok.io/timer/exercise={exercise_name}&sets={sets}&rest={rest}"
 
     if last_exercise:
     
-        output += f'竟然只安排了一個動作!\n太偷懶了吧廢物!!! ಠ▃ಠ'
+        end = f"竟然真的只排一個動作!\n太偷懶了吧廢物!!! ಠ▃ಠ"
+        return json.dumps({"head": head, "output": output, "end": end})
 
-    return output
+    return json.dumps({"head": head, "output": output})
 
 @app.route('/next_exercise', methods=['GET', 'POST'])
 def next_exercise_hint():
@@ -209,7 +210,7 @@ def next_exercise_hint():
     next_exercise_hint = action.next_exercise_hint(lineuserid)
 
     if not next_exercise_hint:
-        return f'(*￣▽￣)b\n本次訓練已經全部完成啦!!\n運動後請記得補充蛋白質才會越來越巨唷~'
+        return f'您目前並未進行任何訓練唷'
 
     position_name = next_exercise_hint[1]
     trans = Web_format(position_name)
@@ -219,12 +220,13 @@ def next_exercise_hint():
     routine = next_exercise_hint[0].to_dict(orient='records')[0]   
     sets = 0
     rest = 0
-    exercise_name = str()
+    exercise_name = ""
 
-    output = f'巨巨現在進行的是【{position_cn}部肌群】訓練\n\n'
-
+    head = f"正在進行【{position_cn}肌群】訓練\n下一個訓練動作是"
+    output = ""
+    end = ""
     for key, value in routine.items():
-        output += f'{key} : {value}\n'
+        output += f"{key} : {value}\n"
         if key == '訓練動作':
             exercise_name = value      
         elif key == '訓練組數':
@@ -232,13 +234,15 @@ def next_exercise_hint():
         elif key == '組間休息時間(sec)':
             rest = value
 
-    output += f'\n點擊下方連結可以開啟輔助計時頁面\nhttps://f99c6c53e900.ngrok.io/timer/exercise={exercise_name}&sets={sets}&rest={rest}\n\n'
+    output += f"\n點擊下方連結可以開啟輔助計時頁面\nhttps://f99c6c53e900.ngrok.io/timer/exercise={exercise_name}&sets={sets}&rest={rest}"
     
     if last_exercise:
-    
-        output += f'(*￣▽￣)b\n本次訓練已經全部完成啦!!\n運動後請記得補充蛋白質才會越來越巨唷~'
 
-    return output
+        end = f"本次【{position_cn}肌群】訓練已完成\n運動後請記得補充蛋白質才會越來越巨唷~"
+    
+        return json.dumps({"head": head, "output": output, "end": end})
+    
+    return json.dumps({"head": head, "output": output})
 
 
 
@@ -264,30 +268,70 @@ def callback():
 # 定義MessageEvent觸發時執行的動作
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-    mtext = event.message.text
     
-    if mtext == '課表規劃':
-
+    mtext = event.message.text
+    profile = linebot_client.get_profile(event.source.user_id)
+    username = profile.display_name
+    
+    if mtext == '課表規劃': 
+        
+        head = f'Hi {username}~\n請選擇一個部位進行課表規劃~'
         flexmessage = json.load(open('workoutholly/static/fm_create_routine.json','r',encoding='utf-8'))
-        linebot_client.reply_message(event.reply_token, FlexSendMessage('課表規劃', flexmessage))
+        linebot_client.reply_message(event.reply_token, [TextMessage(text=head), FlexSendMessage('課表規劃', flexmessage)])
+
     
     elif mtext == '課表查詢':
 
+        head = f'Hi {username}~\n想查詢哪個部位的訓練課表呢~'
         flexmessage = json.load(open('workoutholly/static/fm_search_routine.json','r',encoding='utf-8'))
-        linebot_client.reply_message(event.reply_token, FlexSendMessage('課表查詢', flexmessage))
+        linebot_client.reply_message(event.reply_token, [TextMessage(text=head), FlexSendMessage('課表規劃', flexmessage)])
+
 
     elif mtext == '開始健身':
 
+        head = f'Hi {username}~\n馬上選擇要訓練的部位吧!!'
         flexmessage = json.load(open('workoutholly/static/fm_workout.json','r',encoding='utf-8'))
-        linebot_client.reply_message(event.reply_token, FlexSendMessage('開始健身', flexmessage))
+        linebot_client.reply_message(event.reply_token, [TextMessage(text=head), FlexSendMessage('課表規劃', flexmessage)])
+
 
     elif mtext == '下個動作':
 
         user_id = event.source.user_id
-        data = {'user_id': user_id}
+        data = { 'user_id': user_id }
+        head = f'Hi {username}~\n'
         searchRoutine = requests.request('POST', 'https://f99c6c53e900.ngrok.io//next_exercise', data=data)
-        routine_hint = searchRoutine.text
-        linebot_client.reply_message(event.reply_token, TextMessage(text=routine_hint))
+        
+
+        try:
+            routine_hint = json.loads(searchRoutine.text)
+            output = routine_hint['output']
+            if 'end' in routine_hint:
+                end = routine_hint['end']
+                head = routine_hint['head']
+                linebot_client.reply_message(event.reply_token, [TextMessage(text=head), TextMessage(text=output), TextMessage(text=end)])
+            else:
+                head = routine_hint['head'] 
+                linebot_client.reply_message(event.reply_token, [TextMessage(text=head), TextMessage(text=output)])
+        except:
+            routine_hint = searchRoutine.text
+            routine_hint = head + routine_hint
+            linebot_client.reply_message(event.reply_token, [TextMessage(text=routine_hint)])
+
+    elif mtext in ['幹', '操你媽', '機掰', '操', '幹你娘']:
+
+        text1 = '罵髒話是不對的~\n'
+        text2 = '罵髒話是不好的~\n'
+        text3 = '那沒什麼事我先走了~'
+        linebot_client.reply_message(event.reply_token, [TextMessage(text=text1), TextMessage(text=text2), TextMessage(text=text3)])
+
+
+    else:
+        
+        user_id = event.source.user_id
+        data = { 'user_id': user_id }
+        head = f'不是吧!?{username}\n你不知道WorkoutHolly只需要點選圖文介面，就可使用所有功能嗎~'
+        linebot_client.reply_message(event.reply_token, TextMessage(text=head))
+
 
 
 @handler.add(PostbackEvent) 
@@ -296,18 +340,44 @@ def handle_postback(event):
     pd, user_id,= event.postback.data, event.source.user_id
     option = pd[:4]
     data = { 'user_id': user_id, 'position': pd[4:] }
-    
+    profile = linebot_client.get_profile(event.source.user_id)
+    username = profile.display_name
+    head = f"Hi {username}~\n"
+
     if option == '課表查詢':
 
         searchRoutine = requests.request('POST', 'https://f99c6c53e900.ngrok.io//routine_search', data=data)
-        routine = searchRoutine.text
-        linebot_client.reply_message(event.reply_token, TextMessage(text=routine))
+        try:
+            routine_query = json.loads(searchRoutine.text)
+            print(routine_query)
+            head += routine_query['head']
+            output = routine_query['output']
+            if 'end' in routine_query:
+                end = routine_query['end']
+                linebot_client.reply_message(event.reply_token, [TextMessage(text=head), TextMessage(text=output), TextMessage(text=end)])
+            else:
+                linebot_client.reply_message(event.reply_token, [TextMessage(text=head), TextMessage(text=output)])
+        except:
+            output = searchRoutine.text
+            linebot_client.reply_message(event.reply_token, TextMessage(text=output))
+
 
     elif option == '開始健身':
 
         searchRoutine = requests.request('POST', 'https://f99c6c53e900.ngrok.io//workout', data=data)
-        routine_hint = searchRoutine.text
-        linebot_client.reply_message(event.reply_token, TextMessage(text=routine_hint))
+        try:
+            routine_hint = json.loads(searchRoutine.text)
+            head += routine_hint['head']
+            output = routine_hint['output']
+            if 'end' in routine_hint:
+                end = routine_hint['end']
+                linebot_client.reply_message(event.reply_token, [TextMessage(text=head), TextMessage(text=output), TextMessage(text=end)])
+            else:
+                linebot_client.reply_message(event.reply_token, [TextMessage(text=head), TextMessage(text=output)])
+        except:
+            routine_hint = searchRoutine.text
+            linebot_client.reply_message(event.reply_token, [TextMessage(text=routine_hint)])
+
     
     
 

@@ -107,7 +107,6 @@ class Routines(db.Model):
         self.rest = rest
         
         
-
 # temp_routine( 暫存課表 )定義
 class Temp_routines(db.Model):
 
@@ -181,7 +180,7 @@ class Web_format():
 
         return self.position
 
-
+# 建立基礎資料庫元素
 class Add_fondation_element():
 
     def __init__(self) -> None:
@@ -219,12 +218,13 @@ class Add_fondation_element():
         
         db.session.commit()
 
-
+# 資料庫操作方法
 class RoutineAction():
 
     def __init__(self) -> None:
         pass
 
+    # 新增課表
     def add_routines_to_db(self, check_exercises, check_exercises_dict, user_db, position_db):
 
         for num in range(len(check_exercises)):
@@ -240,14 +240,14 @@ class RoutineAction():
                 )
             db.session.add(routine)
             db.session.commit()
-
+    
+    # 查詢課表
     def get_routine(self, position_name, lineuserid):
 
         tableColumn = Web_format.tabel_head[1:] 
         
         # 從db獲取該user欲查詢該部位課表的所有exercise name
         routines_query = Routines.query.join(Positions, Users).filter((Positions.name == position_name) & (Users.lineuserid == lineuserid)).all()
-        print(routines_query)
 
         if not routines_query:
             return pd.DataFrame()
@@ -267,7 +267,8 @@ class RoutineAction():
         routine_df['訓練動作'] = exercise[tableColumn[0]]
 
         return routine_df
-
+   
+    # 建立暫時課表
     def create_temp_routines(self, position_name, lineuserid):
 
         query = Routines.query.join(Positions, Users).filter((Positions.name == position_name) & (Users.lineuserid == lineuserid)).first()
@@ -280,7 +281,7 @@ class RoutineAction():
             user_db = Users.query.filter_by(lineuserid=lineuserid).first()
             position_db = Positions.query.filter_by(name=position_name).first()
             #清除user的暫存課表 
-            Temp_routines.query.filter_by(position_id=position_db.id).filter_by(user_id= user_db.id).delete() 
+            Temp_routines.query.filter_by(user_id= user_db.id).delete() 
             db.session.commit() 
                        
         except:
@@ -301,7 +302,8 @@ class RoutineAction():
             db.engine.execute(sql)
             db.session.commit()
             return 'OK'
-
+  
+    # 查詢動作提示
     def get_routine_hint(self, position_name, lineuserid):
 
         user_db = Users.query.filter_by(lineuserid=lineuserid).first()
@@ -322,6 +324,8 @@ class RoutineAction():
         # 判斷是否為最後一組動作
         if len(temp_routine_df.index) == 1:
             last_exercise = True
+        else:
+            last_exercise = False
 
         # 修改dataframe的column名稱, 調整index, 把exercise_id置換為name
         tableColumn = Web_format.tabel_head[1:]
@@ -332,7 +336,8 @@ class RoutineAction():
         temp_routine_df['訓練動作'] = exercise[tableColumn[0]]
 
         return [temp_routine_df, last_exercise]
-
+  
+    # 查詢下一步動作提示
     def next_exercise_hint(self, lineuserid):
 
         user_db = Users.query.filter_by(lineuserid=lineuserid).first()
@@ -355,6 +360,8 @@ class RoutineAction():
             # 判斷是否為最後一組動作
             if len(temp_routine_df.index) == 1:
                 last_exercise = True
+            else:
+                last_exercise = False
             
             # 修改dataframe的column名稱, 調整index, 把exercise_id置換為name
             tableColumn = Web_format.tabel_head[1:]
